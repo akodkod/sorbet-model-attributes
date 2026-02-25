@@ -47,11 +47,18 @@ Metrics/MethodLength:
 Metrics/PerceivedComplexity:
   Max: 10
 
+Naming/FileName:
+  Exclude:
+    - lib/sorbet-attributes.rb
+
 Naming/PredicatePrefix:
   Enabled: false
 
 RSpec/ExampleLength:
   Max: 20
+
+RSpec/SpecFilePathFormat:
+  Enabled: false
 
 RSpec/MultipleDescribes:
   Enabled: false
@@ -64,6 +71,9 @@ RSpec/MultipleMemoizedHelpers:
 
 RSpec/NestedGroups:
   Max: 5
+
+Style/AccessModifierDeclarations:
+  EnforcedStyle: inline
 
 Style/ClassVars:
   Enabled: false

@@ -17,6 +17,7 @@ gem "rubocop-rspec"
 gem "appraisal"
 gem "rspec"
 gem "simplecov"
+gem "sqlite3"
 
 gem "sorbet-static-and-runtime"
 gem "tapioca", "~> 0.17.10"
