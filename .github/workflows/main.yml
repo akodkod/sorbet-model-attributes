@@ -1,0 +1,34 @@
+name: Ruby
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Ruby ${{ matrix.ruby }} / Rails ${{ matrix.rails }}
+    strategy:
+      matrix:
+        ruby:
+          - '3.4.7'
+        rails:
+          - '7'
+          - '8'
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+      - name: Install Appraisal dependencies
+        run: bundle exec appraisal rails-${{ matrix.rails }} bundle install
+      - name: Run the default task
+        run: bundle exec appraisal rails-${{ matrix.rails }} rake

@@ -1,0 +1,7 @@
+bindir
+Kodkod
+kwargs
+nilable
+popen
+readlines
+rubocop
