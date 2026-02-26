@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe SorbetAttributes::ModelConcern do
+RSpec.describe SorbetModelAttributes::ModelConcern do
   describe "getter" do
     it "deserializes JSONB to struct" do
       user = User.create!(settings: { theme: "dark", font_size: 16, notifications: false })

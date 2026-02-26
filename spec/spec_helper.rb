@@ -3,7 +3,7 @@
 require "simplecov"
 SimpleCov.start
 
-require "sorbet-attributes"
+require "sorbet-model-attributes"
 require "active_record"
 
 require_relative "support/database"

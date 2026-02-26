@@ -1,7 +1,7 @@
 # typed: strict
 # frozen_string_literal: true
 
-return unless defined?(SorbetAttributes::ModelConcern)
+return unless defined?(SorbetModelAttributes::ModelConcern)
 
 module Tapioca
   module Dsl

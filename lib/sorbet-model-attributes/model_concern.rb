@@ -1,7 +1,7 @@
 # typed: false
 # frozen_string_literal: true
 
-module SorbetAttributes
+module SorbetModelAttributes
   module ModelConcern
     extend ActiveSupport::Concern
 
@@ -37,7 +37,7 @@ module SorbetAttributes
           result = serializer.deserialize(hash)
 
           unless result.success?
-            raise SorbetAttributes::DeserializationError,
+            raise SorbetModelAttributes::DeserializationError,
                   "Failed to deserialize #{column_name}: #{result.error}"
           end
 
@@ -78,7 +78,7 @@ module SorbetAttributes
       result = serializer.serialize(struct)
 
       unless result.success?
-        raise SorbetAttributes::SerializationError,
+        raise SorbetModelAttributes::SerializationError,
               "Failed to serialize #{column_name}: #{result.error}"
       end
 
@@ -90,14 +90,14 @@ module SorbetAttributes
       deserialize_result = serializer.deserialize(hash)
 
       unless deserialize_result.success?
-        raise SorbetAttributes::DeserializationError,
+        raise SorbetModelAttributes::DeserializationError,
               "Failed to deserialize #{column_name}: #{deserialize_result.error}"
       end
 
       serialize_result = serializer.serialize(deserialize_result.payload)
 
       unless serialize_result.success?
-        raise SorbetAttributes::SerializationError,
+        raise SorbetModelAttributes::SerializationError,
               "Failed to serialize #{column_name}: #{serialize_result.error}"
       end
 
@@ -116,7 +116,7 @@ module SorbetAttributes
         result = config[:serializer].serialize(struct)
 
         unless result.success?
-          raise SorbetAttributes::SerializationError,
+          raise SorbetModelAttributes::SerializationError,
                 "Failed to serialize #{column_name}: #{result.error}"
         end
 

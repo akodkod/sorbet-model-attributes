@@ -1,4 +1,4 @@
-# SorbetAttributes
+# SorbetModelAttributes
 
 Typed JSON/JSONB attributes for ActiveRecord models using [Sorbet](https://sorbet.org/)'s `T::Struct`. Serialize and deserialize structured data with full type safety, validations, and defaults -- no more raw hash access.
 
@@ -7,7 +7,7 @@ Typed JSON/JSONB attributes for ActiveRecord models using [Sorbet](https://sorbe
 Add to your Gemfile:
 
 ```ruby
-gem "sorbet-attributes"
+gem "sorbet-model-attributes"
 ```
 
 ## Usage
@@ -106,12 +106,12 @@ end
 
 ## Rails integration
 
-In a Rails app, `SorbetAttributes::ModelConcern` is automatically included into `ActiveRecord::Base` via a Railtie. No manual setup required.
+In a Rails app, `SorbetModelAttributes::ModelConcern` is automatically included into `ActiveRecord::Base` via a Railtie. No manual setup required.
 
 Outside of Rails, include the concern manually:
 
 ```ruby
-ActiveRecord::Base.include(SorbetAttributes::ModelConcern)
+ActiveRecord::Base.include(SorbetModelAttributes::ModelConcern)
 ```
 
 ## Requirements
@@ -127,7 +127,7 @@ After checking out the repo, run `bin/setup` to install dependencies. Then, run 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/akodkod/sorbet-attributes. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/akodkod/sorbet-attributes/blob/main/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at https://github.com/akodkod/sorbet-model-attributes. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/akodkod/sorbet-model-attributes/blob/main/CODE_OF_CONDUCT.md).
 
 ## License
 

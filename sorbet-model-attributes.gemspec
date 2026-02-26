@@ -1,23 +1,23 @@
 # frozen_string_literal: true
 
-require_relative "lib/sorbet-attributes/version"
+require_relative "lib/sorbet-model-attributes/version"
 
 Gem::Specification.new do |spec|
-  spec.name = "sorbet-attributes"
-  spec.version = SorbetAttributes::VERSION
+  spec.name = "sorbet-model-attributes"
+  spec.version = SorbetModelAttributes::VERSION
   spec.authors = ["Andrew Kodkod"]
   spec.email = ["andrew@kodkod.me"]
 
   spec.summary = "Typed JSON attributes for ActiveRecord models using Sorbet's T::Struct"
   spec.description = "Add typed JSON attributes to your ActiveRecord models using Sorbet's T::Struct"
-  spec.homepage = "https://github.com/akodkod/sorbet-attributes"
+  spec.homepage = "https://github.com/akodkod/sorbet-model-attributes"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.2.0"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["allowed_push_host"] = "https://rubygems.org"
-  spec.metadata["source_code_uri"] = "https://github.com/akodkod/sorbet-attributes"
-  spec.metadata["changelog_uri"] = "https://github.com/akodkod/sorbet-attributes/blob/main/CHANGELOG.md"
+  spec.metadata["source_code_uri"] = "https://github.com/akodkod/sorbet-model-attributes"
+  spec.metadata["changelog_uri"] = "https://github.com/akodkod/sorbet-model-attributes/blob/main/CHANGELOG.md"
   spec.metadata["rubygems_mfa_required"] = "true"
 
   # Specify which files should be added to the gem when it is released.

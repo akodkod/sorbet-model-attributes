@@ -49,7 +49,7 @@ Metrics/PerceivedComplexity:
 
 Naming/FileName:
   Exclude:
-    - lib/sorbet-attributes.rb
+    - lib/sorbet-model-attributes.rb
 
 Naming/PredicatePrefix:
   Enabled: false

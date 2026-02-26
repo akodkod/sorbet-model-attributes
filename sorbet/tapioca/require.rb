@@ -1,7 +1,7 @@
 # typed: true
 # frozen_string_literal: true
 
-require "sorbet-attributes"
+require "sorbet-model-attributes"
 require "active_record"
 
 require "spec/support/database"

@@ -5,11 +5,11 @@ require "active_record"
 require "sorbet-runtime"
 require "sorbet-schema"
 
-require "sorbet-attributes/version"
-require "sorbet-attributes/model_concern"
-require "sorbet-attributes/railtie" if defined?(Rails)
+require "sorbet-model-attributes/version"
+require "sorbet-model-attributes/model_concern"
+require "sorbet-model-attributes/railtie" if defined?(Rails)
 
-module SorbetAttributes
+module SorbetModelAttributes
   class Error < StandardError; end
   class DeserializationError < Error; end
   class SerializationError < Error; end

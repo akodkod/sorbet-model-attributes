@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    sorbet-attributes (0.1.0)
+    sorbet-model-attributes (0.1.0)
       rails (>= 7.0)
       sorbet-runtime (>= 0.6)
       sorbet-schema (>= 0.9)
@@ -325,7 +325,7 @@ DEPENDENCIES
   rubocop-rake
   rubocop-rspec
   simplecov
-  sorbet-attributes!
+  sorbet-model-attributes!
   sorbet-static-and-runtime
   sqlite3
   tapioca (~> 0.17.10)
@@ -419,7 +419,7 @@ CHECKSUMS
   simplecov-html (0.13.2) sha256=bd0b8e54e7c2d7685927e8d6286466359b6f16b18cb0df47b508e8d73c777246
   simplecov_json_formatter (0.1.4) sha256=529418fbe8de1713ac2b2d612aa3daa56d316975d307244399fa4838c601b428
   sorbet (0.6.12848) sha256=996776913b0d45a5bec8ac2abb7dccba5adbf5ac4a6e49dacd0f9d055ef95a72
-  sorbet-attributes (0.1.0)
+  sorbet-model-attributes (0.1.0)
   sorbet-result (1.4.0) sha256=194eededbcb78cf04ee2db8bd3b19e76f305dc043062ed90c56b4b9eac268ccd
   sorbet-runtime (0.6.12848) sha256=25d115576572dffbc4f22fc627709e91af335ce175d564b0adf6d735c1a04239
   sorbet-schema (0.9.3) sha256=ef87356e82c9dff6671e11372a0515f736504e81b2d9753e01c3b79d2530a84b
