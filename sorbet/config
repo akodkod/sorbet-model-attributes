@@ -1,5 +1,6 @@
 --dir
 .
 --ignore=tmp/
+--ignore=spec/
 --ignore=vendor/
 --cache-dir=sorbet/cache

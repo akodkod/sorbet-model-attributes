@@ -32,7 +32,7 @@ module Tapioca
           root.create_path(constant) do |klass|
             definitions.each do |column_name, config|
               struct_class = config[:struct_class]
-              struct_type = T.must(struct_class.name)
+              struct_type = struct_class.name
 
               create_getter(klass, column_name.to_s, struct_type)
               create_setter(klass, column_name.to_s, struct_type)

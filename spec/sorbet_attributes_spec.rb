@@ -3,12 +3,13 @@
 RSpec.describe SorbetModelAttributes::ModelConcern do
   describe "getter" do
     it "deserializes JSONB to struct" do
-      user = User.create!(settings: { theme: "dark", font_size: 16, notifications: false })
+      user = User.create!(settings: { theme: "dark", font_size: 16, notifications: false, role: :admin })
 
       expect(user.settings).to be_a(UserSettings)
       expect(user.settings.theme).to eq("dark")
       expect(user.settings.font_size).to eq(16)
       expect(user.settings.notifications).to be(false)
+      expect(user.settings.role).to eq(:admin)
     end
 
     it "returns nil for nil column" do
@@ -27,11 +28,12 @@ RSpec.describe SorbetModelAttributes::ModelConcern do
     end
 
     it "deserializes from a freshly loaded record" do
-      user = User.create!(settings: { theme: "dark", font_size: 16, notifications: true })
+      user = User.create!(settings: { theme: "dark", font_size: 16, notifications: true, role: :admin })
       loaded = User.find(user.id)
 
       expect(loaded.settings).to be_a(UserSettings)
       expect(loaded.settings.theme).to eq("dark")
+      expect(loaded.settings.role).to eq(:admin)
     end
   end
 

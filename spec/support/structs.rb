@@ -4,6 +4,7 @@ class UserSettings < T::Struct
   prop :theme, String, default: "light"
   prop :font_size, Integer, default: 14
   prop :notifications, T::Boolean, default: true
+  prop :role, Symbol, default: :user
 end
 
 class UserPreferences < T::Struct
