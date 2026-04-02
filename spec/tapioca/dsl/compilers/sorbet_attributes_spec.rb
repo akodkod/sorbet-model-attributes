@@ -38,22 +38,40 @@ RSpec.describe Tapioca::Dsl::Compilers::SorbetAttributes do
       expect(output).to include("def preferences=(value); end")
     end
 
-    it "generates nilable return type for getter" do
-      output = rbi_for(User)
+    context "when optional is true" do
+      it "generates nilable return type for getter" do
+        output = rbi_for(User)
 
-      expect(output).to include("returns(T.nilable(::UserSettings))")
-      expect(output).to include("returns(T.nilable(::UserPreferences))")
+        expect(output).to include("returns(T.nilable(::UserSettings))")
+      end
+
+      it "generates nilable union type for setter parameter" do
+        output = rbi_for(User)
+
+        expect(output).to include(
+          "params(value: T.nilable(T.any(::UserSettings, T::Hash[T.untyped, T.untyped])))",
+        )
+      end
     end
 
-    it "generates union type for setter parameter" do
-      output = rbi_for(User)
+    context "when optional is false (default)" do
+      it "generates non-nilable return type for getter" do
+        output = rbi_for(User)
 
-      expect(output).to include(
-        "params(value: T.nilable(T.any(::UserSettings, T::Hash[T.untyped, T.untyped])))",
-      )
-      expect(output).to include(
-        "params(value: T.nilable(T.any(::UserPreferences, T::Hash[T.untyped, T.untyped])))",
-      )
+        expect(output).to include("returns(::UserPreferences)")
+        expect(output).not_to include("returns(T.nilable(::UserPreferences))")
+      end
+
+      it "generates non-nilable union type for setter parameter" do
+        output = rbi_for(User)
+
+        expect(output).to include(
+          "params(value: T.any(::UserPreferences, T::Hash[T.untyped, T.untyped]))",
+        )
+        expect(output).not_to include(
+          "params(value: T.nilable(T.any(::UserPreferences, T::Hash[T.untyped, T.untyped])))",
+        )
+      end
     end
 
     it "generates void return type for setter" do

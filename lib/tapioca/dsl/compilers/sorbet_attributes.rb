@@ -33,27 +33,40 @@ module Tapioca
             definitions.each do |column_name, config|
               struct_class = config[:struct_class]
               struct_type = struct_class.name
+              optional = config.fetch(:optional, false)
 
-              create_getter(klass, column_name.to_s, struct_type)
-              create_setter(klass, column_name.to_s, struct_type)
+              create_getter(klass, column_name.to_s, struct_type, optional)
+              create_setter(klass, column_name.to_s, struct_type, optional)
             end
           end
         end
 
-        sig { params(klass: RBI::Scope, name: String, struct_type: String).void }
-        private def create_getter(klass, name, struct_type)
+        sig { params(klass: RBI::Scope, name: String, struct_type: String, optional: T::Boolean).void }
+        private def create_getter(klass, name, struct_type, optional)
+          return_type = if optional
+                          "T.nilable(::#{struct_type})"
+                        else
+                          "::#{struct_type}"
+                        end
+
           klass.create_method(
             name,
-            return_type: "T.nilable(::#{struct_type})",
+            return_type: return_type,
           )
         end
 
-        sig { params(klass: RBI::Scope, name: String, struct_type: String).void }
-        private def create_setter(klass, name, struct_type)
+        sig { params(klass: RBI::Scope, name: String, struct_type: String, optional: T::Boolean).void }
+        private def create_setter(klass, name, struct_type, optional)
+          value_type = if optional
+                         "T.nilable(T.any(::#{struct_type}, T::Hash[T.untyped, T.untyped]))"
+                       else
+                         "T.any(::#{struct_type}, T::Hash[T.untyped, T.untyped])"
+                       end
+
           klass.create_method(
             "#{name}=",
             parameters: [
-              create_param("value", type: "T.nilable(T.any(::#{struct_type}, T::Hash[T.untyped, T.untyped]))"),
+              create_param("value", type: value_type),
             ],
             return_type: "void",
           )

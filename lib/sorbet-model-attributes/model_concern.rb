@@ -12,12 +12,12 @@ module SorbetModelAttributes
     end
 
     class_methods do # rubocop:disable Metrics/BlockLength
-      def sorbet_attributes(column_name, struct_class)
+      def sorbet_attributes(column_name, struct_class, optional: false)
         column_name = column_name.to_sym
         serializer = Typed::HashSerializer.new(schema: struct_class.schema)
 
         self._sorbet_attribute_definitions = _sorbet_attribute_definitions.merge(
-          column_name => { struct_class: struct_class, serializer: serializer },
+          column_name => { struct_class: struct_class, serializer: serializer, optional: optional },
         )
 
         _define_sorbet_getter(column_name, serializer)
