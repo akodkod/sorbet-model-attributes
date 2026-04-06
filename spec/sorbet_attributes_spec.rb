@@ -72,6 +72,18 @@ RSpec.describe SorbetModelAttributes::ModelConcern do
 
       expect { user.settings = "invalid" }.to raise_error(ArgumentError, /must be a UserSettings, Hash, or nil/)
     end
+
+    it "provides detailed field-level errors for invalid hash values" do
+      user = User.new
+
+      expect { user.settings = { font_size: "not_a_number" } }.to raise_error(
+        SorbetModelAttributes::DeserializationError,
+      ) do |error|
+        expect(error.message).to include("Failed to deserialize 'settings':")
+        expect(error.message).to include("- font_size:")
+        expect(error.message).to include("got String")
+      end
+    end
   end
 
   describe "in-place mutation" do

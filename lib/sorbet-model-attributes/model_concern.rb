@@ -38,7 +38,7 @@ module SorbetModelAttributes
 
           unless result.success?
             raise SorbetModelAttributes::DeserializationError,
-                  "Failed to deserialize #{column_name}: #{result.error}"
+                  _build_detailed_deserialization_error(column_name, serializer.schema, hash, result.error)
           end
 
           instance_variable_set(ivar, result.payload)
@@ -91,7 +91,7 @@ module SorbetModelAttributes
 
       unless deserialize_result.success?
         raise SorbetModelAttributes::DeserializationError,
-              "Failed to deserialize #{column_name}: #{deserialize_result.error}"
+              _build_detailed_deserialization_error(column_name, serializer.schema, hash, deserialize_result.error)
       end
 
       serialize_result = serializer.serialize(deserialize_result.payload)
@@ -121,6 +121,36 @@ module SorbetModelAttributes
         end
 
         write_attribute(column_name, result.payload)
+      end
+    end
+
+    private def _build_detailed_deserialization_error(column_name, schema, hash, original_error)
+      hash = hash.transform_keys(&:to_sym)
+      field_errors = []
+
+      schema.fields.each do |field|
+        value = hash[field.name]
+
+        next if value.nil? && !field.default.nil?
+        next if value.nil? && field.optional?
+
+        if value.nil? && field.required?
+          field_errors << "  - #{field.name}: is required but missing"
+          next
+        end
+
+        next if field.works_with?(value)
+
+        coercion_result = Typed::Coercion.coerce(type: field.type, value: value)
+        if coercion_result.failure?
+          field_errors << "  - #{field.name}: #{coercion_result.error.message} (expected #{field.type}, got #{value.class}: #{value.inspect})"
+        end
+      end
+
+      if field_errors.any?
+        "Failed to deserialize '#{column_name}':\n#{field_errors.join("\n")}"
+      else
+        "Failed to deserialize '#{column_name}': #{original_error}"
       end
     end
   end
