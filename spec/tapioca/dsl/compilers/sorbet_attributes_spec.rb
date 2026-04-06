@@ -78,7 +78,7 @@ RSpec.describe Tapioca::Dsl::Compilers::SorbetAttributes do
       output = rbi_for(User)
 
       setter_lines = output.lines.select { |line| line.include?(".void") }
-      expect(setter_lines.length).to eq(2)
+      expect(setter_lines.length).to eq(3)
     end
   end
 end

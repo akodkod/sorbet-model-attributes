@@ -7,5 +7,6 @@ ActiveRecord::Schema.define do
   create_table :users, force: true do |t|
     t.json :settings
     t.json :preferences
+    t.json :data
   end
 end

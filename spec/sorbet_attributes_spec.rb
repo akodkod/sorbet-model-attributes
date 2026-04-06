@@ -126,6 +126,127 @@ RSpec.describe SorbetModelAttributes::ModelConcern do
     end
   end
 
+  describe "nested structs" do
+    let(:nested_hash) do
+      {
+        microsoft_organization: {
+          id: "abc-123",
+          display_name: "Test Org",
+          verified_domains: [
+            { name: "test.com", is_default: true },
+            { name: "test2.com", is_default: false },
+          ],
+          directory_size_quota: { used: 655, total: 300_000 },
+        },
+      }
+    end
+
+    let(:string_key_hash) do
+      {
+        "microsoft_organization" => {
+          "id" => "abc-123",
+          "display_name" => "Test Org",
+          "verified_domains" => [
+            { "name" => "test.com", "is_default" => true },
+            { "name" => "test2.com", "is_default" => false },
+          ],
+          "directory_size_quota" => { "used" => 655, "total" => 300_000 },
+        },
+      }
+    end
+
+    it "deserializes nested struct from JSONB" do
+      user = User.create!(data: nested_hash)
+
+      expect(user.data).to be_a(OAuthData)
+      expect(user.data.microsoft_organization).to be_a(OrganizationInfo)
+      expect(user.data.microsoft_organization.display_name).to eq("Test Org")
+      expect(user.data.microsoft_organization.verified_domains).to all(be_a(VerifiedDomain))
+      expect(user.data.microsoft_organization.verified_domains.first.name).to eq("test.com")
+      expect(user.data.microsoft_organization.directory_size_quota).to be_a(DirectorySizeQuota)
+      expect(user.data.microsoft_organization.directory_size_quota.used).to eq(655)
+    end
+
+    it "deserializes nested struct from a freshly loaded record" do
+      user = User.create!(data: nested_hash)
+      loaded = User.find(user.id)
+
+      expect(loaded.data.microsoft_organization.display_name).to eq("Test Org")
+      expect(loaded.data.microsoft_organization.verified_domains.length).to eq(2)
+      expect(loaded.data.microsoft_organization.verified_domains.last.name).to eq("test2.com")
+      expect(loaded.data.microsoft_organization.directory_size_quota.total).to eq(300_000)
+    end
+
+    it "assigns nested hash with string keys" do
+      user = User.new
+      user.data = string_key_hash
+      user.save!
+
+      loaded = User.find(user.id)
+      expect(loaded.data.microsoft_organization.display_name).to eq("Test Org")
+      expect(loaded.data.microsoft_organization.verified_domains.first.is_default).to be(true)
+    end
+
+    it "assigns nested hash with symbol keys" do
+      user = User.new
+      user.data = nested_hash
+      user.save!
+
+      loaded = User.find(user.id)
+      expect(loaded.data.microsoft_organization.id).to eq("abc-123")
+    end
+
+    it "persists changes to nested struct properties" do
+      user = User.create!(data: nested_hash)
+
+      user.data.microsoft_organization.display_name = "Updated Org"
+      user.save!
+
+      loaded = User.find(user.id)
+      expect(loaded.data.microsoft_organization.display_name).to eq("Updated Org")
+    end
+
+    it "coerces string values to correct types in nested structs" do
+      hash_with_string_values = {
+        "microsoft_organization" => {
+          "id" => "abc-123",
+          "display_name" => "Test Org",
+          "verified_domains" => [
+            { "name" => "test.com", "is_default" => "true" },
+            { "name" => "test2.com", "is_default" => "false" },
+          ],
+          "directory_size_quota" => { "used" => "655", "total" => "300000" },
+        },
+      }
+
+      user = User.create!(data: hash_with_string_values)
+      loaded = User.find(user.id)
+
+      expect(loaded.data.microsoft_organization.verified_domains.first.is_default).to be(true)
+      expect(loaded.data.microsoft_organization.verified_domains.last.is_default).to be(false)
+      expect(loaded.data.microsoft_organization.directory_size_quota.used).to eq(655)
+    end
+
+    it "provides detailed nested field errors on coercion failure" do
+      bad_hash = {
+        "microsoft_organization" => {
+          "id" => "abc-123",
+          "display_name" => "Test Org",
+          "verified_domains" => [
+            { "name" => "test.com", "is_default" => "" },
+          ],
+          "directory_size_quota" => { "used" => "655", "total" => "300000" },
+        },
+      }
+
+      expect { User.create!(data: bad_hash) }.to raise_error(
+        SorbetModelAttributes::DeserializationError,
+      ) do |error|
+        expect(error.message).to include("verified_domains[0].is_default")
+      end
+    end
+  end
+
   describe "defaults" do
     it "applies struct defaults for missing keys" do
       user = User.create!(settings: { theme: "dark" })
